@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Мои заявки</h1>
+    <a href="{% url 'app:application_create' %}" class="btn">Новая заявка</a>
+</div>
+
+{% if applications %}
+    <div class="cards">
+        {% for application in applications %}
+            <div class="card application-card">
+                <h3>{{ application.course_name }}</h3>
+                <p><strong>Дата начала:</strong> {{ application.desired_start_date|date:"d.m.Y" }}</p>
+                <p><strong>Оплата:</strong> {{ application.get_payment_method_display }}</p>
+                <p><strong>Статус:</strong> <span class="status">{{ application.get_status_display }}</span></p>
+                <p><strong>Создана:</strong> {{ application.created_at|date:"d.m.Y H:i" }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>У вас пока нет заявок.</p>
+    </div>
+{% endif %}
+
+<div class="card">
+    <h2>Отзыв</h2>
+    {% if can_review %}
+        <a href="{% url 'app:review_create' %}" class="btn">Оставить отзыв</a>
+    {% else %}
+        <p>Оставить отзыв можно только после завершения обучения.</p>
+    {% endif %}
+</div>
+{% endblock %}
